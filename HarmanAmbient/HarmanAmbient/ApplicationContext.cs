@@ -1,26 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Harman.Pulse;
+using HarmanAmbient.Harman;
 using HarmanAmbient.ScreenCapturer;
+using HarmanBluetoothClient;
 
 namespace HarmanAmbient
 {
     public class ApplicationContext : System.Windows.Forms.ApplicationContext
     {
+        private HarmanManager _harmanManager;
+        private PulseHandlerInterfaceImpl _pulseInterfaceImpl;
+
         private HarmanAmbientForm harmanForm = new HarmanAmbientForm();
         private NotifyIcon notifyIcon;
         private Thread captureThread;
         private bool _done;
 
-
-
+        
         public ApplicationContext()
         {
+            _pulseInterfaceImpl = new PulseHandlerInterfaceImpl();
+            if (_pulseInterfaceImpl.ConnectMasterDevice(null) == false)
+            {
+                Application.Exit();
+            };
+
+            _harmanManager = new HarmanManager(_pulseInterfaceImpl);
+
             MenuItem configMenuItem = new MenuItem("Configuration", new EventHandler(ShowConfig));
             MenuItem exitMenuItem = new MenuItem("Exit", new EventHandler(Exit));
 
@@ -61,13 +76,16 @@ namespace HarmanAmbient
         {
             while (!_done)
             {
-                using (Bitmap bitmap = CaptureScreen.GetDesktopImage())
+                using (Bitmap image = CaptureScreen.GetDesktopImage())
                 {
+                    _harmanManager.SetImage(image);
+
                     SetBitmapDelegate d = harmanForm.SetBitmap;
-                    harmanForm.Invoke(d, bitmap);
+                    harmanForm.Invoke(d, image);
                 }
                 Thread.Sleep(10);
             }
         }
+
     }
 }

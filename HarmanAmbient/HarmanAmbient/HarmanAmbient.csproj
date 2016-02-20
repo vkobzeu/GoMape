@@ -53,6 +53,7 @@
     <Compile Include="HarmanAmbientForm.Designer.cs">
       <DependentUpon>HarmanAmbientForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Harman\HarmanManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resource.Designer.cs">
@@ -96,10 +97,17 @@
     <None Include="Resources\MainIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Dtafalonso-Android-Lollipop-Youtube.ico" />
+    <None Include="MainIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="MainIcon.ico" />
+    <ProjectReference Include="..\..\Harman.Pulse\Harman.Pulse.csproj">
+      <Project>{0e89f079-12b4-475b-8782-3a1c9a74a158}</Project>
+      <Name>Harman.Pulse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\HarmanBluetoothClient\HarmanBluetoothClient\HarmanBluetoothClient.csproj">
+      <Project>{86CD433A-8CDE-49D3-B206-CB503C45B967}</Project>
+      <Name>HarmanBluetoothClient</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
