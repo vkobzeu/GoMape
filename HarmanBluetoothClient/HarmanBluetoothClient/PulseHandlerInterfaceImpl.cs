@@ -119,7 +119,23 @@ namespace HarmanBluetoothClient
 
         public bool? SetColorImage(PulseColor[] paramArrayOfPulseColor)
         {
-            throw new NotImplementedException();
+            if (!IsConnectMasterDevice ?? false)
+            {
+                /* 165 */
+                return Convert.ToBoolean(false);
+                /*     */
+            } /* 167 */
+            int[] idxPixel = new int[99];
+            /* 168 */
+            for (int i = 0; i < 99; i++)
+            {
+                /* 169 */
+                idxPixel[i] = WebColorHelper.RGBToWeb216Index(paramArrayOfPulseColor[i]);
+                /*     */
+            } /* 171 */
+            SppCmdHelper.ColorImage = idxPixel;
+            /* 172 */
+            return Convert.ToBoolean(true);
         }
 
         public bool? SetDeviceChannel(int paramInt1, int paramInt2)
