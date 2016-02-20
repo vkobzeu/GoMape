@@ -98,7 +98,7 @@ namespace HarmanBluetoothClient
         {
             int colorIdx = WebColorHelper.RGBToWeb216Index(paramPulseColor);
 
-            sbyte[] cmd = new sbyte[] { -86, 88, 2, (sbyte)colorIdx, (sbyte)(0) };
+            sbyte[] cmd = new sbyte[] { -86, 88, 2, (sbyte)colorIdx, (sbyte)(paramBoolean ? 1 : 0) };
             _bluetoothClient.Client.Send(cmd.Select(b => (byte)b).ToArray());
 
             return true;
@@ -132,12 +132,15 @@ namespace HarmanBluetoothClient
             {
                 return false;
             }
-            int[] idxPixel = new int[99];
+            sbyte[] cmd = new sbyte[102];
+            cmd[0] = -86;
+            cmd[1] = 89;
+            cmd[2] = 99;
             for (int i = 0; i < 99; i++)
             {
-                idxPixel[i] = WebColorHelper.RGBToWeb216Index(paramArrayOfPulseColor[i]);
+                cmd[i + 3] = (sbyte)WebColorHelper.RGBToWeb216Index(paramArrayOfPulseColor[i]);
             }
-            SppCmdHelper.ColorImage = idxPixel;
+            _bluetoothClient.Client.Send(cmd.Select(b => (byte)b).ToArray());
             return true;
         }
 
