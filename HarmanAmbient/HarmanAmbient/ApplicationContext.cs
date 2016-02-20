@@ -70,8 +70,8 @@ namespace HarmanAmbient
             Application.Exit();
         }
 
-        delegate void SetBitmapDelegate(Bitmap x);
-
+        delegate void SetBitmapDelegate(Bitmap x, PulseColor c);
+        
         private void ScreenCapture()
         {
             while (!_done)
@@ -80,11 +80,11 @@ namespace HarmanAmbient
                 {
                     using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
                     {
-                        _harmanManager.SetImage(scaledImage);
-
-
+                        PulseColor c;
+                        _harmanManager.SetImage(scaledImage, out c);
+                        
                         SetBitmapDelegate d = harmanForm.SetBitmap;
-                        harmanForm.Invoke(d, scaledImage);
+                        harmanForm.Invoke(d, scaledImage, c);
                     }
 
                 }
