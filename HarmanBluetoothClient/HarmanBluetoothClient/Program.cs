@@ -48,7 +48,16 @@ namespace HarmanBluetoothClient
                 Console.WriteLine("Connected to device's Serial Port");
             }
 
-            //bluetoothClient.Client.Send
+            while(true)
+            {
+                Console.WriteLine("Input color in sbyte");
+                string s = Console.ReadLine();
+                int val = int.Parse(s);
+                //set bg color to smth
+                sbyte[] cmd = new sbyte[] { -86, 88, 2, (sbyte)val, (sbyte)(0) };
+                bluetoothClient.Client.Send(cmd.Select(b => (byte)b).ToArray());
+            }
+            
 
             bluetoothClient.Close();
             Console.WriteLine("Closing the client...");
