@@ -36,7 +36,7 @@ namespace HarmanAmbient
         {
             if (_bitmap != null)
             {
-                e.Graphics.DrawImage(_bitmap, 0, 0);
+                e.Graphics.DrawImage(_bitmap, 0, 0, 110, 90);
             }
             
             base.OnPaint(e);

@@ -82,6 +82,7 @@ namespace HarmanAmbient
                     {
                         _harmanManager.SetImage(scaledImage);
 
+
                         SetBitmapDelegate d = harmanForm.SetBitmap;
                         harmanForm.Invoke(d, scaledImage);
                     }
