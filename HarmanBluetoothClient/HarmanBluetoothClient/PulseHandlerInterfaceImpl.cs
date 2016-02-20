@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Harman.Pulse.Stubs;
 using InTheHand.Net.Sockets;
 using InTheHand.Net.Bluetooth;
@@ -109,33 +107,39 @@ namespace HarmanBluetoothClient
 
         public bool? SetBrightness(int paramInt)
         {
-            throw new NotImplementedException();
+            if (!IsConnectMasterDevice ?? false)
+            {
+                return false;
+            }
+            SppCmdHelper.SetBrightness(paramInt);
+            return true;
         }
 
-        public bool? SetCharacterPattern(char paramChar, PulseColor paramPulseColor1, PulseColor paramPulseColor2, bool paramBoolean)
+        public bool? SetCharacterPattern(char character, PulseColor foreground, PulseColor background, bool inlcudeSlave)
         {
-            throw new NotImplementedException();
+            if (!IsConnectMasterDevice ?? false)
+            {
+                return false;
+            }
+            int foregroundColor = WebColorHelper.RGBToWeb216Index(foreground);
+            int backgroundColor = WebColorHelper.RGBToWeb216Index(background);
+            SppCmdHelper.SetCharacterPattern(character, foregroundColor, backgroundColor, inlcudeSlave);
+            return Convert.ToBoolean(true);
         }
 
         public bool? SetColorImage(PulseColor[] paramArrayOfPulseColor)
         {
             if (!IsConnectMasterDevice ?? false)
             {
-                /* 165 */
-                return Convert.ToBoolean(false);
-                /*     */
-            } /* 167 */
+                return false;
+            }
             int[] idxPixel = new int[99];
-            /* 168 */
             for (int i = 0; i < 99; i++)
             {
-                /* 169 */
                 idxPixel[i] = WebColorHelper.RGBToWeb216Index(paramArrayOfPulseColor[i]);
-                /*     */
-            } /* 171 */
+            }
             SppCmdHelper.ColorImage = idxPixel;
-            /* 172 */
-            return Convert.ToBoolean(true);
+            return true;
         }
 
         public bool? SetDeviceChannel(int paramInt1, int paramInt2)
@@ -148,14 +152,19 @@ namespace HarmanBluetoothClient
             throw new NotImplementedException();
         }
 
-        public void SetLEDAndSoundFeedback(int paramInt)
+        public void SetLEDAndSoundFeedback(int devIndex)
         {
-            throw new NotImplementedException();
+            SppCmdHelper.reqLEDAndSoundFeedback(devIndex);
         }
 
-        public bool? SetLEDPattern(PulseThemePattern paramPulseThemePattern)
+        public bool? SetLEDPattern(PulseThemePattern pattern)
         {
-            throw new NotImplementedException();
+            if (!IsConnectMasterDevice ?? false)
+            {
+                return Convert.ToBoolean(false);
+            }
+            SppCmdHelper.LedPattern = pattern.ordinal();
+            return Convert.ToBoolean(true);
         }
     }
 }
