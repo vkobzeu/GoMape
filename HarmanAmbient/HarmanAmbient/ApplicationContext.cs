@@ -78,10 +78,14 @@ namespace HarmanAmbient
             {
                 using (Bitmap image = CaptureScreen.GetDesktopImage())
                 {
-                    _harmanManager.SetImage(image);
+                    using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
+                    {
+                        _harmanManager.SetImage(scaledImage);
 
-                    SetBitmapDelegate d = harmanForm.SetBitmap;
-                    harmanForm.Invoke(d, image);
+                        SetBitmapDelegate d = harmanForm.SetBitmap;
+                        harmanForm.Invoke(d, scaledImage);
+                    }
+
                 }
                 Thread.Sleep(10);
             }

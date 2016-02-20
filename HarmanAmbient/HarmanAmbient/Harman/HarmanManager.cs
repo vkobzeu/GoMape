@@ -19,33 +19,9 @@ namespace HarmanAmbient.Harman
             _pulseHandlerInterface = pulseHandlerInterface;
         }
 
-        public void SetImage(Bitmap image)
+        public Bitmap SetImage(Bitmap destImage)
         {
-            var width = 11;
-            var height = 9;
-
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height, PixelFormat.Format24bppRgb);
-
-        
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            BitmapData bData = destImage.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadWrite, destImage.PixelFormat);
+            BitmapData bData = destImage.LockBits(new Rectangle(0, 0, destImage.Width, destImage.Height), ImageLockMode.ReadWrite, destImage.PixelFormat);
 
             var bitsPerPixel = 24;
 
@@ -58,11 +34,12 @@ namespace HarmanAmbient.Harman
             /*This overload copies data of /size/ into /data/ from location specified (/Scan0/)*/
             System.Runtime.InteropServices.Marshal.Copy(bData.Scan0, data, 0, size);
 
-            var size2 = width*height;
-
+            var size2 = destImage.Width * destImage.Height;
             PulseColor[] pulseColors = new PulseColor[size2];
             for (int i = 0; i < size2; i ++)
             {
+                pulseColors[i] = new PulseColor();
+
                 var pulseColor = pulseColors[i];
                 pulseColor.red = (sbyte)data[i*3];
                 pulseColor.green = (sbyte)data[i * 3 + 1];
@@ -74,9 +51,11 @@ namespace HarmanAmbient.Harman
 
             destImage.UnlockBits(bData);
 
-            _pulseHandlerInterface.SetBackgroundColor(pulseColors[0], true);
+            //_pulseHandlerInterface.SetBackgroundColor(pulseColors[0], true);
 
-            //_pulseHandlerInterface.SetColorImage(pulseColors);
+            _pulseHandlerInterface.SetColorImage(pulseColors);
+
+            return destImage;
         }
     }
 }
