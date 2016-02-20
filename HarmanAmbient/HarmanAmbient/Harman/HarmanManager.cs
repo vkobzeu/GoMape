@@ -62,7 +62,9 @@ namespace HarmanAmbient.Harman
 
             PulseColor[] pulseColors = new PulseColor[size2];
             for (int i = 0; i < size2; i ++)
-            {
+            {                
+                pulseColors[i] = new PulseColor();
+
                 var pulseColor = pulseColors[i];
                 pulseColor.red = (sbyte)data[i*3];
                 pulseColor.green = (sbyte)data[i * 3 + 1];
