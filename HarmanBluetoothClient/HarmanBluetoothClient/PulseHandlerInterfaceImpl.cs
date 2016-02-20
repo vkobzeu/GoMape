@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Harman.Pulse.Stubs;
 using InTheHand.Net.Sockets;
 using InTheHand.Net.Bluetooth;
 
@@ -24,7 +23,7 @@ namespace HarmanBluetoothClient
             throw new NotImplementedException();
         }
 
-        public bool? ConnectMasterDevice(Activity paramActivity)
+        public bool? ConnectMasterDevice()
         {
             _bluetoothClient = new BluetoothClient();
 

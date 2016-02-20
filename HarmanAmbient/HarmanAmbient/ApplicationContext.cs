@@ -29,7 +29,7 @@ namespace HarmanAmbient
         public ApplicationContext()
         {
             _pulseInterfaceImpl = new PulseHandlerInterfaceImpl();
-            if (_pulseInterfaceImpl.ConnectMasterDevice(null) == false)
+            if (_pulseInterfaceImpl.ConnectMasterDevice() == false)
             {
                 Application.Exit();
             };

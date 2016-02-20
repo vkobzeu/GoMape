@@ -1,12 +1,10 @@
-﻿using Harman.Pulse.Stubs;
-
-namespace Harman.Pulse
+﻿namespace Harman.Pulse
 {
     public interface PulseHandlerInterface
     {
         void registerPulseNotifiedListener(PulseNotifiedListener paramPulseNotifiedListener);
-
-        bool? ConnectMasterDevice(Activity paramActivity);
+        
+        bool? ConnectMasterDevice();
 
         bool? IsConnectMasterDevice { get; }
 
