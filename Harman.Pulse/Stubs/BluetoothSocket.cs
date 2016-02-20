@@ -1,4 +1,6 @@
-﻿namespace Harman.Pulse.Stubs
+﻿using System.IO;
+
+namespace Harman.Pulse.Stubs
 {
     public class BluetoothSocket
     {
@@ -6,5 +8,11 @@
         {
             
         }
+
+        public bool Connected { get; set; }
+
+        public Stream InputStream { get; set; }
+
+        public Stream OutputStream { get; set; }
     }
 }

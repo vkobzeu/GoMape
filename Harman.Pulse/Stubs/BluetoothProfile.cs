@@ -1,4 +1,6 @@
-﻿namespace Harman.Pulse.Stubs
+﻿using System.Collections.Generic;
+
+namespace Harman.Pulse.Stubs
 {
     public class BluetoothProfile
     {
@@ -6,5 +8,7 @@
         {
             
         }
+
+        public IList<BluetoothDevice> ConnectedDevices { get; set; }
     }
 }

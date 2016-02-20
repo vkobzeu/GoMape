@@ -1,6 +1,6 @@
 ﻿namespace Harman.Pulse.Stubs
 {
-    public class Activity : Context
+    public class Context
     {
          
     }
