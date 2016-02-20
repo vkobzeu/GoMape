@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Harman.Pulse;
 using HarmanAmbient.ScreenCapturer;
 
 namespace HarmanAmbient
@@ -15,13 +16,15 @@ namespace HarmanAmbient
     public partial class HarmanAmbientForm : Form
     {
         private Bitmap _bitmap;
+        private SolidBrush _b = new SolidBrush(Color.AliceBlue);
+
 
         public HarmanAmbientForm()
         {
             InitializeComponent();
         }
 
-        public void SetBitmap(Bitmap bmp)
+        public void SetBitmap(Bitmap bmp, PulseColor c)
         {
             _bitmap?.Dispose();
             
@@ -29,6 +32,8 @@ namespace HarmanAmbient
             System.Drawing.Imaging.PixelFormat format = bmp.PixelFormat;
             _bitmap = bmp.Clone(cloneRect, format);
 
+            _b.Color = Color.FromArgb((byte) c.red, (byte) c.green, (byte) c.blue);
+            
             this.Refresh();
         }
         
@@ -37,8 +42,10 @@ namespace HarmanAmbient
             if (_bitmap != null)
             {
                 e.Graphics.DrawImage(_bitmap, 0, 0, 110, 90);
+
+                e.Graphics.FillEllipse(_b, 50, 50, 20, 20);
             }
-            
+
             base.OnPaint(e);
         }
 
