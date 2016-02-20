@@ -59,10 +59,11 @@ namespace HarmanAmbient.Harman
             System.Runtime.InteropServices.Marshal.Copy(bData.Scan0, data, 0, size);
 
             var size2 = width*height;
-
             PulseColor[] pulseColors = new PulseColor[size2];
             for (int i = 0; i < size2; i ++)
             {
+                pulseColors[i] = new PulseColor();
+
                 var pulseColor = pulseColors[i];
                 pulseColor.red = (sbyte)data[i*3];
                 pulseColor.green = (sbyte)data[i * 3 + 1];
