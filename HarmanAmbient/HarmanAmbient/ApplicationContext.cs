@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -54,6 +55,11 @@ namespace HarmanAmbient
             notifyIcon.Visible = true;
             
             MainForm = harmanForm;
+            harmanForm.CtrlAlt1Pressed += SetUnifiedMode;
+            harmanForm.CtrlAlt2Pressed += SetSplitMode;
+
+            HotKeys.RegisterHotKey(harmanForm.Handle, 1, 3 /* ctrl+alt */, (int) Keys.D1);
+            HotKeys.RegisterHotKey(harmanForm.Handle, 2, 3 /* ctrl+alt */, (int) Keys.D2);
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
@@ -62,11 +68,13 @@ namespace HarmanAmbient
         void SetSplitMode(object sender, EventArgs e)
         {
             _issplit = true;
+            Debug.WriteLine("Split mode: On");
         }
 
         void SetUnifiedMode(object sender, EventArgs e)
         {
             _issplit = false;
+            Debug.WriteLine("Split mode: Off");
         }
 
         void ShowConfig(object sender, EventArgs e)
@@ -80,12 +88,14 @@ namespace HarmanAmbient
             {
                 harmanForm.ShowDialog();
             }*/
-        }
+            }
 
         void Exit(object sender, EventArgs e)
         {
             _done = true;
             captureThread.Join();
+            HotKeys.UnregisterHotKey(harmanForm.Handle, 1);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, 2);
             Application.Exit();
         }
 
@@ -131,25 +141,25 @@ namespace HarmanAmbient
         {
             using (Bitmap scaledImage = CaptureScreen.ScaleImage(22, 9, image))
             {
-                System.Drawing.Imaging.PixelFormat format = image.PixelFormat;
+                System.Drawing.Imaging.PixelFormat format = scaledImage.PixelFormat;
 
                 Rectangle cloneRect = new Rectangle(0, 0, scaledImage.Width / 2, scaledImage.Height);
-                Bitmap left = image.Clone(cloneRect, format);
+                Bitmap left = scaledImage.Clone(cloneRect, format);
                 Rectangle cloneRect2 = new Rectangle(scaledImage.Width / 2, 0, scaledImage.Width / 2, scaledImage.Height);
-                Bitmap right = image.Clone(cloneRect2, format);
+                Bitmap right = scaledImage.Clone(cloneRect2, format);
 
 
                 PulseColor c;
                 _harmanManager.SetImage(left, out c);
-                
+
                 //SetBitmapDelegate d = harmanForm.SetBitmap;
                 //harmanForm.Invoke(d, scaledImage, c);
 
                 _harmanManager2.SetImage(right, out c);
-
-                left.Dispose();
-                right.Dispose();
-            }
+            
+            left.Dispose();
+            right.Dispose();
         }
     }
+}
 }

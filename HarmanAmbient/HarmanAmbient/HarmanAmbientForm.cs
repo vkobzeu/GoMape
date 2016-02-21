@@ -18,6 +18,8 @@ namespace HarmanAmbient
         private Bitmap _bitmap;
         private SolidBrush _b = new SolidBrush(Color.AliceBlue);
 
+        public event EventHandler CtrlAlt1Pressed;
+        public event EventHandler CtrlAlt2Pressed;
 
         public HarmanAmbientForm()
         {
@@ -58,5 +60,31 @@ namespace HarmanAmbient
             
         }*/
 
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0312)
+            {
+                if (m.WParam.ToInt32() == 1)
+                {
+                    OnCtrlAlt1Pressed();
+                }
+                else if (m.WParam.ToInt32() == 2)
+                {
+                    OnCtrlAlt2Pressed();
+                }
+            }
+            base.WndProc(ref m);
+        }
+
+        protected virtual void OnCtrlAlt1Pressed()
+        {
+            CtrlAlt1Pressed?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnCtrlAlt2Pressed()
+        {
+            CtrlAlt2Pressed?.Invoke(this, EventArgs.Empty);
+        }
     }
 }
