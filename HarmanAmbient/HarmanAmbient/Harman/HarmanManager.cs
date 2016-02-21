@@ -62,6 +62,7 @@ namespace HarmanAmbient.Harman
 
             //_pulseHandlerInterface.SetBackgroundColor(c, true);
             _pulseHandlerInterface.SetColorImage(pulseColors);
+            //_pulseHandlerInterface.SetBrightness(Int32.MaxValue);
 
             return destImage;
         }

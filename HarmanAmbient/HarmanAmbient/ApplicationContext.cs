@@ -18,7 +18,9 @@ namespace HarmanAmbient
     public class ApplicationContext : System.Windows.Forms.ApplicationContext
     {
         private HarmanManager _harmanManager;
-        private PulseHandlerInterfaceImpl _pulseInterfaceImpl;
+        private HarmanManager _harmanManager2;
+        private PulseHandlerInterfaceImpl _pulseInterfaceImpl1;
+        private PulseHandlerInterfaceImpl _pulseInterfaceImpl2;
 
         private HarmanAmbientForm harmanForm = new HarmanAmbientForm();
         private NotifyIcon notifyIcon;
@@ -28,13 +30,15 @@ namespace HarmanAmbient
         
         public ApplicationContext()
         {
-            _pulseInterfaceImpl = new PulseHandlerInterfaceImpl();
-            if (_pulseInterfaceImpl.ConnectMasterDevice() == false)
+            _pulseInterfaceImpl1 = new PulseHandlerInterfaceImpl("JBL Pulse Right");
+            _pulseInterfaceImpl2 = new PulseHandlerInterfaceImpl("JBL Pulse Left");
+            if (_pulseInterfaceImpl1.ConnectMasterDevice() == false || _pulseInterfaceImpl2.ConnectMasterDevice() == false)
             {
                 Application.Exit();
             };
 
-            _harmanManager = new HarmanManager(_pulseInterfaceImpl);
+            _harmanManager = new HarmanManager(_pulseInterfaceImpl1);
+            _harmanManager2 = new HarmanManager(_pulseInterfaceImpl2);
 
             MenuItem configMenuItem = new MenuItem("Configuration", new EventHandler(ShowConfig));
             MenuItem exitMenuItem = new MenuItem("Exit", new EventHandler(Exit));
@@ -81,8 +85,10 @@ namespace HarmanAmbient
                     using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
                     {
                         PulseColor c;
+                        PulseColor c2;
                         _harmanManager.SetImage(scaledImage, out c);
-                        
+                        _harmanManager2.SetImage(scaledImage, out c2);
+
                         SetBitmapDelegate d = harmanForm.SetBitmap;
                         harmanForm.Invoke(d, scaledImage, c);
                     }
