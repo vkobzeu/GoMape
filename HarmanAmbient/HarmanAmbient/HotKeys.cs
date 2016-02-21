@@ -9,6 +9,8 @@ namespace HarmanAmbient
         public const int SplitMode = 2;
         public const int IncreaseBrightness = 3;
         public const int DecreaseBrightness = 4;
+        public const int ManualBrightnessMode = 5;
+        public const int AutomaticBrightnessMode = 6;
 
         // DLL libraries used to manage hotkeys
         [DllImport("user32.dll")]

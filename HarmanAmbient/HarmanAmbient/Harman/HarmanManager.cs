@@ -74,72 +74,52 @@ namespace HarmanAmbient.Harman
 
         public static int GetBrightnesForLuminosity(float luminance)
         {
-            float brightnessFactor = 1.0f;
-            if (luminance > 500)
+            if (luminance > 70)
+            {
+                luminance = 70;
+            }
+
+            float brightnessFactor = (255.0f * (luminance / 70.0f));
+            if (brightnessFactor < 30)
+            {
+                brightnessFactor = 30;
+            }
+            return (int)brightnessFactor;
+            /*
+            if (luminance > 70)
             {
                 brightnessFactor = 1.0f;
             }
-            else if (luminance > 400)
+            else if (luminance > 60)
             {
                 brightnessFactor = .9f;
             }
-            else if (luminance > 300)
+            else if (luminance > 50)
             {
                 brightnessFactor = .8f;
             }
-            else if (luminance > 200)
+            else if (luminance > 40)
             {
                 brightnessFactor = .7f;
             }
-            else if (luminance > 100)
+            else if (luminance > 30)
             {
                 brightnessFactor = .6f;
             }
-            else if (luminance > 90)
+            else if (luminance > 20)
             {
                 brightnessFactor = .55f;
             }
-            else if (luminance > 80)
+            else if (luminance > 10)
             {
                 brightnessFactor = .50f;
             }
-            else if (luminance > 70)
-            {
-                brightnessFactor = .45f;
-            }
-            else if (luminance > 60)
-            {
-                brightnessFactor = .40f;
-            }
-            else if (luminance > 50)
-            {
-                brightnessFactor = .35f;
-            }
-            else if (luminance > 45)
-            {
-                brightnessFactor = .30f;
-            }
-            else if (luminance > 40)
-            {
-                brightnessFactor = .25f;
-            }
-            else if (luminance > 35)
-            {
+            else { 
                 brightnessFactor = .2f;
             }
-            else if (luminance > 30)
-            {
-                brightnessFactor = .15f;
-            }
-            else if (luminance > 25)
-            {
-                brightnessFactor = .1f;
-            }
-            else if (luminance > 20)
-            {
-                brightnessFactor = .5f;
-            }
+
             return (int)(255.0f * brightnessFactor);
+            */
         }
     }
 }

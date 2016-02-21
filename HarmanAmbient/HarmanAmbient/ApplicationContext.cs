@@ -28,7 +28,7 @@ namespace HarmanAmbient
 
         private bool _isflowthings = false;
         private string _sensorId = "ms2";
-        private IHarmanFlowthingsService _flowthingsService = new HarmanFlowthingsServiceMock();
+        private IHarmanFlowthingsService _flowthingsService = new HarmanFlowthingsServiceImpl();
 
         private int _brightness = 255;
 
@@ -62,16 +62,29 @@ namespace HarmanAmbient
             harmanForm.BrightnessIncreased += HarmanFormOnBrightnessIncreased;
             harmanForm.FlowthingsEnabled += HarmanForm_FlowthingsEnabled;
             harmanForm.FlowthingsSensorChanged += HarmanForm_FlowthingsSensorChanged;
+            harmanForm.ManualBrightnessMode += HarmanFormOnManualBrightnessMode;
+            harmanForm.AutomaticBrightnessMode += HarmanFormOnAutomaticBrightnessMode;
 
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SingleMode, 3 /* ctrl+alt */, (int) Keys.D1);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SplitMode, 3 /* ctrl+alt */, (int) Keys.D2);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness, 3 /* ctrl+alt */, (int) Keys.OemMinus);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness, 3 /* ctrl+alt */, (int) Keys.Oemplus);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.ManualBrightnessMode, 3 /* ctrl+alt */, (int) Keys.D9);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.AutomaticBrightnessMode, 3 /* ctrl+alt */, (int) Keys.D0);
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
         }
 
+        private void HarmanFormOnAutomaticBrightnessMode(object sender, EventArgs eventArgs)
+        {
+            Debug.WriteLine("Automatic Brightness");
+        }
+
+        private void HarmanFormOnManualBrightnessMode(object sender, EventArgs eventArgs)
+        {
+            Debug.WriteLine("Manual Brightness");
+        }
 
         private void HarmanFormOnBrightnessDecreased(object sender, EventArgs e)
         {
@@ -80,7 +93,7 @@ namespace HarmanAmbient
             if (br < 0)
             {
                 br = 0;
-            }
+        }
             _brightness = br;
         }
 
@@ -91,7 +104,7 @@ namespace HarmanAmbient
             if (br > 255)
             {
                 br = 255;
-            }
+        }
             _brightness = br;
         }
 
@@ -128,9 +141,11 @@ namespace HarmanAmbient
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.SplitMode);
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness);
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.ManualBrightnessMode);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.AutomaticBrightnessMode);
             Application.Exit();
         }
-        
+
         private void ScreenCapture()
         {
             while (!_done)
@@ -152,13 +167,13 @@ namespace HarmanAmbient
                         else
                         {
                             ProcessSplitImage(image);
-                        }
+                    }
                     //}
                 }
                 Thread.Sleep(1);
             }
         }
-        
+
         private void ProcessUnifiedImage(Bitmap image)
         {
             using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
@@ -185,18 +200,18 @@ namespace HarmanAmbient
                 Rectangle cloneRect2 = new Rectangle(scaledImage.Width / 2, 0, scaledImage.Width / 2, scaledImage.Height);
                 Bitmap right = scaledImage.Clone(cloneRect2, format);
 
-                
-                _harmanManager.SetImage(left, _brightness);
 
+                _harmanManager.SetImage(left, _brightness);
+                
                 //SetBitmapDelegate d = harmanForm.SetBitmap;
                 //harmanForm.Invoke(d, scaledImage, c);
 
                 _harmanManager2.SetImage(right, _brightness);
             
-                left.Dispose();
-                right.Dispose();
-            }
+            left.Dispose();
+            right.Dispose();
         }
+    }
         
         private void HarmanForm_FlowthingsSensorChanged(object sender, FlowthingsSensorChangedEventArgs e)
         {
@@ -217,5 +232,5 @@ namespace HarmanAmbient
                 }
             }
         }
-    }
+}
 }
