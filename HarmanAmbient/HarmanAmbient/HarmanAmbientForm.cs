@@ -18,8 +18,10 @@ namespace HarmanAmbient
         private Bitmap _bitmap;
         private SolidBrush _b = new SolidBrush(Color.AliceBlue);
 
-        public event EventHandler CtrlAlt1Pressed;
-        public event EventHandler CtrlAlt2Pressed;
+        public event EventHandler SingleModeEnabled;
+        public event EventHandler SplitModeEnabled;
+        public event EventHandler BrightnessDecreased;
+        public event EventHandler BrightnessIncreased;
 
         public HarmanAmbientForm()
         {
@@ -65,26 +67,43 @@ namespace HarmanAmbient
         {
             if (m.Msg == 0x0312)
             {
-                if (m.WParam.ToInt32() == 1)
+                switch (m.WParam.ToInt32())
                 {
-                    OnCtrlAlt1Pressed();
-                }
-                else if (m.WParam.ToInt32() == 2)
-                {
-                    OnCtrlAlt2Pressed();
+                    case HotKeys.SingleMode:
+                        OnSingleModeEnabled();
+                        break;
+                    case HotKeys.SplitMode:
+                        OnSplitModeEnabled();
+                        break;
+                    case HotKeys.DecreaseBrightness:
+                        OnBrightnessDecreased();
+                        break;
+                    case HotKeys.IncreaseBrightness:
+                        OnBrightnessIncreased();
+                        break;
                 }
             }
             base.WndProc(ref m);
         }
 
-        protected virtual void OnCtrlAlt1Pressed()
+        protected virtual void OnSingleModeEnabled()
         {
-            CtrlAlt1Pressed?.Invoke(this, EventArgs.Empty);
+            SingleModeEnabled?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void OnCtrlAlt2Pressed()
+        protected virtual void OnSplitModeEnabled()
         {
-            CtrlAlt2Pressed?.Invoke(this, EventArgs.Empty);
+            SplitModeEnabled?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnBrightnessDecreased()
+        {
+            BrightnessDecreased?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnBrightnessIncreased()
+        {
+            BrightnessIncreased?.Invoke(this, EventArgs.Empty);
         }
     }
 }
