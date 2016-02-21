@@ -109,13 +109,14 @@ namespace HarmanBluetoothClient
             return true;
         }
 
-        public bool? SetBrightness(int paramInt)
+        public bool? SetBrightness(int brightness)
         {
             if (!IsConnectMasterDevice ?? false)
             {
                 return false;
             }
-            SppCmdHelper.SetBrightness(paramInt);
+            sbyte[] cmd = { -86, 86, 1, (sbyte)brightness };
+            _bluetoothClient.Client.Send(cmd.Select(b => (byte)b).ToArray());
             return true;
         }
 
