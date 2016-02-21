@@ -11,7 +11,7 @@
 //{
 //    /*     */
 //    /*     */
-//    public class ImplementPulseHandler : PulseHandlerInterface
+//    public class ImplementPulseHandler : IPulseHandler
 //    /*     */
 //    /*     */
 //    {
@@ -73,7 +73,7 @@
 //        } /*     */
 //        /*  46 */
 
-//        public virtual void registerPulseNotifiedListener(PulseNotifiedListener listener)
+//        public virtual void RegisterPulseNotifiedListener(PulseNotifiedListener listener)
 //        {
 //            this.pulseNotifiedListener = listener;
 //        }
@@ -227,7 +227,7 @@
 //        } /*     */
 //        /*     */
 
-//        public virtual bool? GetLEDPattern()
+//        public virtual bool? GetLedPattern()
 //        {
 //            /* 117 */
 //            if (!this.bConnectMasterDevice.Value)
@@ -278,7 +278,7 @@
 //        } /*     */
 //        /* 141 */
 
-//        public virtual bool? SetLEDPattern(PulseThemePattern pattern)
+//        public virtual bool? SetLedPattern(PulseThemePattern pattern)
 //        {
 //            if (!this.bConnectMasterDevice.Value)
 //            {
@@ -416,7 +416,7 @@
 //        } /*     */
 //        /*     */
 
-//        public virtual void SetLEDAndSoundFeedback(int devIndex)
+//        public virtual void SetLedAndSoundFeedback(int devIndex)
 //        {
 //            /* 208 */
 //            SppCmdHelper.reqLEDAndSoundFeedback(devIndex);

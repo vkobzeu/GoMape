@@ -19,8 +19,8 @@ namespace HarmanAmbient
     {
         private HarmanManager _harmanManager;
         private HarmanManager _harmanManager2;
-        private PulseHandlerInterfaceImpl _pulseInterfaceImpl1;
-        private PulseHandlerInterfaceImpl _pulseInterfaceImpl2;
+        private PulseHandlerImpl _pulseImpl1;
+        private PulseHandlerImpl _pulseImpl2;
 
         private HarmanAmbientForm harmanForm = new HarmanAmbientForm();
         private NotifyIcon notifyIcon;
@@ -31,15 +31,15 @@ namespace HarmanAmbient
 
         public ApplicationContext()
         {
-            _pulseInterfaceImpl1 = new PulseHandlerInterfaceImpl("JBL Pulse Right");
-            _pulseInterfaceImpl2 = new PulseHandlerInterfaceImpl("JBL Pulse Left");
-            if (_pulseInterfaceImpl1.ConnectMasterDevice() == false || _pulseInterfaceImpl2.ConnectMasterDevice() == false)
+            _pulseImpl1 = new PulseHandlerImpl("JBL Pulse Right");
+            _pulseImpl2 = new PulseHandlerImpl("JBL Pulse Left");
+            if (_pulseImpl1.ConnectMasterDevice() == false || _pulseImpl2.ConnectMasterDevice() == false)
             {
                 Application.Exit();
             };
 
-            _harmanManager = new HarmanManager(_pulseInterfaceImpl1);
-            _harmanManager2 = new HarmanManager(_pulseInterfaceImpl2);
+            _harmanManager = new HarmanManager(_pulseImpl1);
+            _harmanManager2 = new HarmanManager(_pulseImpl2);
 
             MenuItem configMenuItem = new MenuItem("Configuration", new EventHandler(ShowConfig));
             MenuItem splitModeMenuItem = new MenuItem("Split mode", new EventHandler(SetSplitMode));

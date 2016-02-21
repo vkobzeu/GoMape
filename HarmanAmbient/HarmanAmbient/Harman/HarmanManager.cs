@@ -12,11 +12,11 @@ namespace HarmanAmbient.Harman
 {
     public class HarmanManager
     {
-        private PulseHandlerInterface _pulseHandlerInterface;
+        private IPulseHandler _pulseHandler;
 
-        public HarmanManager(PulseHandlerInterface pulseHandlerInterface)
+        public HarmanManager(IPulseHandler pulseHandler)
         {
-            _pulseHandlerInterface = pulseHandlerInterface;
+            _pulseHandler = pulseHandler;
         }
 
         public Bitmap SetImage(Bitmap destImage, out PulseColor c)
@@ -60,9 +60,9 @@ namespace HarmanAmbient.Harman
             var c2 = pulseColors[destImage.Width*destImage.Height / 2];
             c = new PulseColor(c2.red, c2.green, c2.blue);
 
-            //_pulseHandlerInterface.SetBackgroundColor(c, true);
-            _pulseHandlerInterface.SetColorImage(pulseColors);
-            //_pulseHandlerInterface.SetBrightness(Int32.MaxValue);
+            //_pulseHandler.SetBackgroundColor(c, true);
+            _pulseHandler.SetColorImage(pulseColors);
+            //_pulseHandler.SetBrightness(Int32.MaxValue);
 
             return destImage;
         }

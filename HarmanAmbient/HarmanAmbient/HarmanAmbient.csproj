@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationContext.cs" />
+    <Compile Include="Gaussian.cs" />
     <Compile Include="HarmanAmbientForm.cs">
       <SubType>Form</SubType>
     </Compile>
