@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Harman.Pulse;
 using HarmanAmbient.Harman;
@@ -55,14 +49,28 @@ namespace HarmanAmbient
             notifyIcon.Visible = true;
             
             MainForm = harmanForm;
-            harmanForm.CtrlAlt1Pressed += SetUnifiedMode;
-            harmanForm.CtrlAlt2Pressed += SetSplitMode;
+            harmanForm.SingleModeEnabled += SetUnifiedMode;
+            harmanForm.SplitModeEnabled += SetSplitMode;
+            harmanForm.BrightnessDecreased += HarmanFormOnBrightnessDecreased;
+            harmanForm.BrightnessIncreased += HarmanFormOnBrightnessIncreased;
 
-            HotKeys.RegisterHotKey(harmanForm.Handle, 1, 3 /* ctrl+alt */, (int) Keys.D1);
-            HotKeys.RegisterHotKey(harmanForm.Handle, 2, 3 /* ctrl+alt */, (int) Keys.D2);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SingleMode, 3 /* ctrl+alt */, (int) Keys.D1);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SplitMode, 3 /* ctrl+alt */, (int) Keys.D2);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness, 3 /* ctrl+alt */, (int) Keys.OemMinus);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness, 3 /* ctrl+alt */, (int) Keys.Oemplus);
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
+        }
+
+        private void HarmanFormOnBrightnessDecreased(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Decrease Brightness");
+        }
+
+        private void HarmanFormOnBrightnessIncreased(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Increase Brightness");
         }
 
         void SetSplitMode(object sender, EventArgs e)
@@ -93,8 +101,10 @@ namespace HarmanAmbient
         {
             _done = true;
             captureThread.Join();
-            HotKeys.UnregisterHotKey(harmanForm.Handle, 1);
-            HotKeys.UnregisterHotKey(harmanForm.Handle, 2);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.SingleMode);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.SplitMode);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness);
             Application.Exit();
         }
 

@@ -5,6 +5,11 @@ namespace HarmanAmbient
 {
     public class HotKeys
     {
+        public const int SingleMode = 1;
+        public const int SplitMode = 2;
+        public const int IncreaseBrightness = 3;
+        public const int DecreaseBrightness = 4;
+
         // DLL libraries used to manage hotkeys
         [DllImport("user32.dll")]
         public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
