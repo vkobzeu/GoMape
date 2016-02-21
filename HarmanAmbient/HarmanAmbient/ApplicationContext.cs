@@ -104,7 +104,7 @@ namespace HarmanAmbient
                         ProcessSplitImage(image);
                     }
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(1);
             }
         }
 
