@@ -27,6 +27,7 @@ namespace HarmanBluetoothClient
 
         public bool ConnectMasterDevice()
         {
+            return false;
             _bluetoothClient = new BluetoothClient();
 
             List<BluetoothDeviceInfo> targetDevices = null;

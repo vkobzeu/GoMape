@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -53,6 +54,11 @@ namespace HarmanAmbient
             notifyIcon.Visible = true;
             
             MainForm = harmanForm;
+            harmanForm.CtrlAlt1Pressed += SetUnifiedMode;
+            harmanForm.CtrlAlt2Pressed += SetSplitMode;
+
+            HotKeys.RegisterHotKey(harmanForm.Handle, 1, 3 /* ctrl+alt */, (int) Keys.D1);
+            HotKeys.RegisterHotKey(harmanForm.Handle, 2, 3 /* ctrl+alt */, (int) Keys.D2);
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
@@ -61,11 +67,13 @@ namespace HarmanAmbient
         void SetSplitMode(object sender, EventArgs e)
         {
             _issplit = true;
+            Debug.WriteLine("Split mode: On");
         }
 
         void SetUnifiedMode(object sender, EventArgs e)
         {
             _issplit = false;
+            Debug.WriteLine("Split mode: Off");
         }
 
         void ShowConfig(object sender, EventArgs e)
@@ -84,6 +92,8 @@ namespace HarmanAmbient
         {
             _done = true;
             captureThread.Join();
+            HotKeys.UnregisterHotKey(harmanForm.Handle, 1);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, 2);
             Application.Exit();
         }
 
