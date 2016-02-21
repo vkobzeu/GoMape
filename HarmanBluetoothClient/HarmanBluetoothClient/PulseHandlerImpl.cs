@@ -75,7 +75,7 @@ namespace HarmanBluetoothClient
             throw new NotImplementedException();
         }
 
-        public bool GetLEDPattern()
+        public bool GetLedPattern()
         {
             throw new NotImplementedException();
         }
@@ -112,7 +112,7 @@ namespace HarmanBluetoothClient
 
         public bool SetBrightness(int brightness)
         {
-            if (!IsConnectMasterDevice ?? false)
+            if (!IsConnectMasterDevice)
             {
                 return false;
             }
@@ -123,7 +123,7 @@ namespace HarmanBluetoothClient
 
         public bool SetCharacterPattern(char character, PulseColor foreground, PulseColor background, bool inlcudeSlave)
         {
-            if (!IsConnectMasterDevice ?? false)
+            if (!IsConnectMasterDevice)
             {
                 return false;
             }
@@ -135,7 +135,7 @@ namespace HarmanBluetoothClient
 
         public bool SetColorImage(PulseColor[] paramArrayOfPulseColor)
         {
-            if (!IsConnectMasterDevice ?? false)
+            if (!IsConnectMasterDevice)
             {
                 return false;
             }
@@ -161,14 +161,14 @@ namespace HarmanBluetoothClient
             throw new NotImplementedException();
         }
 
-        public void SetLEDAndSoundFeedback(int devIndex)
+        public void SetLedAndSoundFeedback(int devIndex)
         {
             SppCmdHelper.reqLEDAndSoundFeedback(devIndex);
         }
 
-        public bool SetLEDPattern(PulseThemePattern pattern)
+        public bool SetLedPattern(PulseThemePattern pattern)
         {
-            if (!IsConnectMasterDevice ?? false)
+            if (!IsConnectMasterDevice)
             {
                 return Convert.ToBoolean(false);
             }
