@@ -129,8 +129,8 @@ namespace HarmanAmbient
             {
                 PulseColor c;
                 PulseColor c2;
-                _harmanManager.SetImage(scaledImage, out c);
-                _harmanManager2.SetImage(scaledImage, out c2);
+                _harmanManager.SetImage(scaledImage, brightness);
+                _harmanManager2.SetImage(scaledImage, brightness);
 
                 //SetBitmapDelegate d = harmanForm.SetBitmap;
                 //harmanForm.Invoke(d, scaledImage, c);
@@ -149,13 +149,13 @@ namespace HarmanAmbient
                 Bitmap right = scaledImage.Clone(cloneRect2, format);
 
 
-                PulseColor c;
-                _harmanManager.SetImage(left, out c);
+
+                _harmanManager.SetImage(left, brightness);
 
                 //SetBitmapDelegate d = harmanForm.SetBitmap;
                 //harmanForm.Invoke(d, scaledImage, c);
 
-                _harmanManager2.SetImage(right, out c);
+                _harmanManager2.SetImage(right, brightness);
             
             left.Dispose();
             right.Dispose();

@@ -19,7 +19,7 @@ namespace HarmanAmbient.Harman
             _pulseHandler = pulseHandler;
         }
 
-        public Bitmap SetImage(Bitmap destImage, out PulseColor c)
+        public Bitmap SetImage(Bitmap destImage, float brightness)
         {
             BitmapData bData = destImage.LockBits(new Rectangle(0, 0, destImage.Width, destImage.Height), ImageLockMode.ReadWrite, destImage.PixelFormat);
 
@@ -56,10 +56,6 @@ namespace HarmanAmbient.Harman
             destImage.UnlockBits(bData);
 
            
-
-            var c2 = pulseColors[destImage.Width*destImage.Height / 2];
-            c = new PulseColor(c2.red, c2.green, c2.blue);
-
             //_pulseHandler.SetBackgroundColor(c, true);
             _pulseHandler.SetColorImage(pulseColors);
             //_pulseHandler.SetBrightness(Int32.MaxValue);
