@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Harman.Pulse;
-using HarmanAmbient.ScreenCapturer;
 
 namespace HarmanAmbient
 {
@@ -22,6 +14,8 @@ namespace HarmanAmbient
         public event EventHandler SplitModeEnabled;
         public event EventHandler BrightnessDecreased;
         public event EventHandler BrightnessIncreased;
+        public event EventHandler ManualBrightnessMode;
+        public event EventHandler AutomaticBrightnessMode;
 
         public HarmanAmbientForm()
         {
@@ -38,7 +32,7 @@ namespace HarmanAmbient
 
             _b.Color = Color.FromArgb((byte) c.red, (byte) c.green, (byte) c.blue);
             
-            this.Refresh();
+            Refresh();
         }
         
         protected override void OnPaint(PaintEventArgs e)
@@ -81,6 +75,12 @@ namespace HarmanAmbient
                     case HotKeys.IncreaseBrightness:
                         OnBrightnessIncreased();
                         break;
+                    case HotKeys.ManualBrightnessMode:
+                        OnManualBrightnessMode();
+                        break;
+                    case HotKeys.AutomaticBrightnessMode:
+                        OnAutomaticBrightnessMode();
+                        break;
                 }
             }
             base.WndProc(ref m);
@@ -104,6 +104,16 @@ namespace HarmanAmbient
         protected virtual void OnBrightnessIncreased()
         {
             BrightnessIncreased?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnManualBrightnessMode()
+        {
+            ManualBrightnessMode?.Invoke(this, EventArgs.Empty);
+        }
+
+        protected virtual void OnAutomaticBrightnessMode()
+        {
+            AutomaticBrightnessMode?.Invoke(this, EventArgs.Empty);
         }
     }
 }
