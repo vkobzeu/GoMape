@@ -25,9 +25,10 @@ namespace HarmanAmbient
         private HarmanAmbientForm harmanForm = new HarmanAmbientForm();
         private NotifyIcon notifyIcon;
         private Thread captureThread;
-        private bool _done;
 
-        
+        private bool _done;
+        private bool _issplit;
+
         public ApplicationContext()
         {
             _pulseInterfaceImpl1 = new PulseHandlerInterfaceImpl("JBL Pulse Right");
@@ -41,18 +42,30 @@ namespace HarmanAmbient
             _harmanManager2 = new HarmanManager(_pulseInterfaceImpl2);
 
             MenuItem configMenuItem = new MenuItem("Configuration", new EventHandler(ShowConfig));
+            MenuItem splitModeMenuItem = new MenuItem("Split mode", new EventHandler(SetSplitMode));
+            MenuItem unifiedModeMenuItem = new MenuItem("Unified mode", new EventHandler(SetUnifiedMode));
             MenuItem exitMenuItem = new MenuItem("Exit", new EventHandler(Exit));
 
             NotifyIcon notifyIcon = new NotifyIcon();
             notifyIcon.Icon = Resource.MainIcon;
             notifyIcon.ContextMenu = new ContextMenu(new MenuItem[]
-                { configMenuItem, exitMenuItem });
+                { configMenuItem, splitModeMenuItem, unifiedModeMenuItem, exitMenuItem });
             notifyIcon.Visible = true;
             
             MainForm = harmanForm;
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
+        }
+
+        void SetSplitMode(object sender, EventArgs e)
+        {
+            _issplit = true;
+        }
+
+        void SetUnifiedMode(object sender, EventArgs e)
+        {
+            _issplit = false;
         }
 
         void ShowConfig(object sender, EventArgs e)
@@ -82,21 +95,63 @@ namespace HarmanAmbient
             {
                 using (Bitmap image = CaptureScreen.GetDesktopImage())
                 {
-                    using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
+                    if (!_issplit)
                     {
-                        PulseColor c;
-                        PulseColor c2;
-                        _harmanManager.SetImage(scaledImage, out c);
-                        _harmanManager2.SetImage(scaledImage, out c2);
-
-                        SetBitmapDelegate d = harmanForm.SetBitmap;
-                        harmanForm.Invoke(d, scaledImage, c);
+                        ProcessUnifiedImage(image);
                     }
-
+                    else
+                    {
+                        ProcessSplitImage(image);
+                    }
                 }
                 Thread.Sleep(10);
             }
         }
 
+        private void ProcessUnifiedImage(Bitmap image)
+        {
+            using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, image))
+            {
+                PulseColor c;
+                PulseColor c2;
+                _harmanManager.SetImage(scaledImage, out c);
+                _harmanManager2.SetImage(scaledImage, out c2);
+
+                SetBitmapDelegate d = harmanForm.SetBitmap;
+                harmanForm.Invoke(d, scaledImage, c);
+            }
+        }
+
+        private void ProcessSplitImage(Bitmap image)
+        {
+            System.Drawing.Imaging.PixelFormat format = image.PixelFormat;
+
+            Rectangle cloneRect = new Rectangle(0, 0, image.Width / 2, image.Height);
+            Bitmap left = image.Clone(cloneRect, format);
+            Rectangle cloneRect2 = new Rectangle(image.Width / 2, 0, image.Width / 2, image.Height);
+            Bitmap right = image.Clone(cloneRect2, format);
+
+
+            using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, left))
+            {
+                PulseColor c;
+                _harmanManager.SetImage(scaledImage, out c);
+                
+                SetBitmapDelegate d = harmanForm.SetBitmap;
+                harmanForm.Invoke(d, scaledImage, c);
+            }
+
+            using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, right))
+            {
+                PulseColor c;
+                _harmanManager.SetImage(scaledImage, out c);
+                
+                SetBitmapDelegate d = harmanForm.SetBitmap;
+                harmanForm.Invoke(d, scaledImage, c);
+            }
+            
+            left.Dispose();
+            right.Dispose();
+        }
     }
 }
