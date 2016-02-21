@@ -12,6 +12,7 @@ using Harman.Pulse;
 using HarmanAmbient.Harman;
 using HarmanAmbient.ScreenCapturer;
 using HarmanBluetoothClient;
+using HarmanAmbient.ImageBlurFilter;
 
 namespace HarmanAmbient
 {
@@ -95,13 +96,16 @@ namespace HarmanAmbient
             {
                 using (Bitmap image = CaptureScreen.GetDesktopImage())
                 {
-                    if (!_issplit)
+                    using (var gaussed = image.ImageBlurFilter(ExtBitmap.BlurType.GaussianBlur3x3))
                     {
-                        ProcessUnifiedImage(image);
-                    }
-                    else
-                    {
-                        ProcessSplitImage(image);
+                        if (!_issplit)
+                        {
+                            ProcessUnifiedImage(gaussed);
+                        }
+                        else
+                        {
+                            ProcessSplitImage(gaussed);
+                        }
                     }
                 }
                 Thread.Sleep(10);
