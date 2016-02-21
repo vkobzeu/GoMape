@@ -9,9 +9,14 @@ namespace HarmanBluetoothClient
 {
     public class PulseHandlerInterfaceImpl : PulseHandlerInterface
     {
-        const string device_name = "JBL Pulse 2";
+        string _deviceName = "JBL Pulse 2";
 
         private BluetoothClient _bluetoothClient;
+
+        public PulseHandlerInterfaceImpl(string deviceName)
+        {
+            _deviceName = deviceName;
+        }
 
         public bool? IsConnectMasterDevice
         {
@@ -36,11 +41,11 @@ namespace HarmanBluetoothClient
                 att--;
                 var devices = _bluetoothClient.DiscoverDevices();
 
-                targetDevices = devices.Where(d => d.DeviceName == device_name);
+                targetDevices = devices.Where(d => d.DeviceName == _deviceName);
 
                 if (!targetDevices.Any())
                 {
-                    Console.WriteLine("No device by name JBL Pulse 2 found! Retrying...");
+                    Console.WriteLine(string.Format("No device by name {0} found! Retrying...",_deviceName));
                 }
                 else break;
             }
@@ -58,7 +63,7 @@ namespace HarmanBluetoothClient
 
             if (_bluetoothClient.Connected)
             {
-                Console.WriteLine("Connected to device's Serial Port");
+                Console.WriteLine("Connected to the Serial Port");
                 IsConnectMasterDevice = true;
             }
             return true;
