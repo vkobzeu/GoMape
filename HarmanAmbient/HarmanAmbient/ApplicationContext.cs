@@ -28,7 +28,7 @@ namespace HarmanAmbient
         private Thread captureThread;
 
         private bool _done;
-        private bool _issplit;
+        private bool _issplit = false;
 
         public ApplicationContext()
         {
@@ -71,6 +71,7 @@ namespace HarmanAmbient
 
         void ShowConfig(object sender, EventArgs e)
         {
+            /*
             if (harmanForm.Visible)
             {
                 harmanForm.Activate();
@@ -78,7 +79,7 @@ namespace HarmanAmbient
             else
             {
                 harmanForm.ShowDialog();
-            }
+            }*/
         }
 
         void Exit(object sender, EventArgs e)
@@ -96,17 +97,17 @@ namespace HarmanAmbient
             {
                 using (Bitmap image = CaptureScreen.GetDesktopImage())
                 {
-                    using (var gaussed = image.ImageBlurFilter(ExtBitmap.BlurType.GaussianBlur3x3))
-                    {
+                    //using (var gaussed = image.ImageBlurFilter(ExtBitmap.BlurType.GaussianBlur3x3))
+                    //{
                         if (!_issplit)
                         {
-                            ProcessUnifiedImage(gaussed);
+                            ProcessUnifiedImage(image);
                         }
                         else
                         {
-                            ProcessSplitImage(gaussed);
+                            ProcessSplitImage(image);
                         }
-                    }
+                    //}
                 }
                 Thread.Sleep(1);
             }
@@ -121,41 +122,34 @@ namespace HarmanAmbient
                 _harmanManager.SetImage(scaledImage, out c);
                 _harmanManager2.SetImage(scaledImage, out c2);
 
-                SetBitmapDelegate d = harmanForm.SetBitmap;
-                harmanForm.Invoke(d, scaledImage, c);
+                //SetBitmapDelegate d = harmanForm.SetBitmap;
+                //harmanForm.Invoke(d, scaledImage, c);
             }
         }
 
         private void ProcessSplitImage(Bitmap image)
         {
-            System.Drawing.Imaging.PixelFormat format = image.PixelFormat;
-
-            Rectangle cloneRect = new Rectangle(0, 0, image.Width / 2, image.Height);
-            Bitmap left = image.Clone(cloneRect, format);
-            Rectangle cloneRect2 = new Rectangle(image.Width / 2, 0, image.Width / 2, image.Height);
-            Bitmap right = image.Clone(cloneRect2, format);
-
-
-            using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, left))
+            using (Bitmap scaledImage = CaptureScreen.ScaleImage(22, 9, image))
             {
-                PulseColor c;
-                _harmanManager.SetImage(scaledImage, out c);
-                
-                SetBitmapDelegate d = harmanForm.SetBitmap;
-                harmanForm.Invoke(d, scaledImage, c);
-            }
+                System.Drawing.Imaging.PixelFormat format = image.PixelFormat;
 
-            using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, right))
-            {
+                Rectangle cloneRect = new Rectangle(0, 0, scaledImage.Width / 2, scaledImage.Height);
+                Bitmap left = image.Clone(cloneRect, format);
+                Rectangle cloneRect2 = new Rectangle(scaledImage.Width / 2, 0, scaledImage.Width / 2, scaledImage.Height);
+                Bitmap right = image.Clone(cloneRect2, format);
+
+
                 PulseColor c;
-                _harmanManager2.SetImage(scaledImage, out c);
+                _harmanManager.SetImage(left, out c);
                 
                 //SetBitmapDelegate d = harmanForm.SetBitmap;
                 //harmanForm.Invoke(d, scaledImage, c);
+
+                _harmanManager2.SetImage(right, out c);
+
+                left.Dispose();
+                right.Dispose();
             }
-            
-            left.Dispose();
-            right.Dispose();
         }
     }
 }
