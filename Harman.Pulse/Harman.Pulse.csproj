@@ -51,7 +51,7 @@
     <Compile Include="HexHelper.cs" />
     <Compile Include="ImplementPulseHandler.cs" />
     <Compile Include="PulseColor.cs" />
-    <Compile Include="PulseHandlerInterface.cs" />
+    <Compile Include="IPulseHandler.cs" />
     <Compile Include="PulseNotifiedListener.cs" />
     <Compile Include="PulseThemePattern.cs" />
     <Compile Include="SppCmdHelper.cs" />
