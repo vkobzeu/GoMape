@@ -31,8 +31,8 @@ namespace HarmanAmbient
 
         public ApplicationContext()
         {
-            _pulseImpl1 = new PulseHandlerImpl("JBL Pulse Right");
-            _pulseImpl2 = new PulseHandlerImpl("JBL Pulse Left");
+            _pulseImpl1 = new PulseHandlerImpl("JBL Pulse Left");
+            _pulseImpl2 = new PulseHandlerImpl("JBL Pulse Right");
             if (_pulseImpl1.ConnectMasterDevice() == false || _pulseImpl2.ConnectMasterDevice() == false)
             {
                 Application.Exit();
@@ -144,10 +144,10 @@ namespace HarmanAmbient
             using (Bitmap scaledImage = CaptureScreen.ScaleImage(11, 9, right))
             {
                 PulseColor c;
-                _harmanManager.SetImage(scaledImage, out c);
+                _harmanManager2.SetImage(scaledImage, out c);
                 
-                SetBitmapDelegate d = harmanForm.SetBitmap;
-                harmanForm.Invoke(d, scaledImage, c);
+                //SetBitmapDelegate d = harmanForm.SetBitmap;
+                //harmanForm.Invoke(d, scaledImage, c);
             }
             
             left.Dispose();
