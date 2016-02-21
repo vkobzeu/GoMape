@@ -53,14 +53,28 @@ namespace HarmanAmbient
             harmanForm.SplitModeEnabled += SetSplitMode;
             harmanForm.BrightnessDecreased += HarmanFormOnBrightnessDecreased;
             harmanForm.BrightnessIncreased += HarmanFormOnBrightnessIncreased;
+            harmanForm.ManualBrightnessMode += HarmanFormOnManualBrightnessMode;
+            harmanForm.AutomaticBrightnessMode += HarmanFormOnAutomaticBrightnessMode;
 
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SingleMode, 3 /* ctrl+alt */, (int) Keys.D1);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.SplitMode, 3 /* ctrl+alt */, (int) Keys.D2);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness, 3 /* ctrl+alt */, (int) Keys.OemMinus);
             HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness, 3 /* ctrl+alt */, (int) Keys.Oemplus);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.ManualBrightnessMode, 3 /* ctrl+alt */, (int) Keys.D9);
+            HotKeys.RegisterHotKey(harmanForm.Handle, HotKeys.AutomaticBrightnessMode, 3 /* ctrl+alt */, (int) Keys.D0);
 
             captureThread = new Thread(ScreenCapture);
             captureThread.Start();
+        }
+
+        private void HarmanFormOnAutomaticBrightnessMode(object sender, EventArgs eventArgs)
+        {
+            Debug.WriteLine("Automatic Brightness");
+        }
+
+        private void HarmanFormOnManualBrightnessMode(object sender, EventArgs eventArgs)
+        {
+            Debug.WriteLine("Manual Brightness");
         }
 
         private void HarmanFormOnBrightnessDecreased(object sender, EventArgs e)
@@ -106,6 +120,8 @@ namespace HarmanAmbient
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.SplitMode);
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.DecreaseBrightness);
             HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.IncreaseBrightness);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.ManualBrightnessMode);
+            HotKeys.UnregisterHotKey(harmanForm.Handle, HotKeys.AutomaticBrightnessMode);
             Application.Exit();
         }
 
