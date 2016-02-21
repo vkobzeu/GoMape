@@ -10,7 +10,7 @@ namespace Harman.Flowthings
     {
         public float GetSensorLuminance(string sensorId)
         {
-            return 500;
+            return 50;
         }
     }
 }

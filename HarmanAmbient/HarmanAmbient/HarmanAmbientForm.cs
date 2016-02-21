@@ -13,6 +13,17 @@ using HarmanAmbient.ScreenCapturer;
 
 namespace HarmanAmbient
 {
+
+    public class FlowthingsEnabledEventArgs : EventArgs
+    {
+        public bool Enabled { get; set; }
+    }
+
+    public class FlowthingsSensorChangedEventArgs : EventArgs
+    {
+        public string Sensor { get; set; }
+    }
+
     public partial class HarmanAmbientForm : Form
     {
         private Bitmap _bitmap;
@@ -22,6 +33,9 @@ namespace HarmanAmbient
         public event EventHandler SplitModeEnabled;
         public event EventHandler BrightnessDecreased;
         public event EventHandler BrightnessIncreased;
+
+        public event EventHandler<FlowthingsEnabledEventArgs> FlowthingsEnabled;
+        public event EventHandler<FlowthingsSensorChangedEventArgs> FlowthingsSensorChanged;
 
         public HarmanAmbientForm()
         {
@@ -104,6 +118,16 @@ namespace HarmanAmbient
         protected virtual void OnBrightnessIncreased()
         {
             BrightnessIncreased?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            FlowthingsEnabled?.Invoke(this, new FlowthingsEnabledEventArgs() { Enabled = checkBox1.Checked });
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            FlowthingsSensorChanged?.Invoke(this, new FlowthingsSensorChangedEventArgs() { Sensor = comboBox1.SelectedItem != null ? (string)comboBox1.SelectedItem : "ms2" });
         }
     }
 }
